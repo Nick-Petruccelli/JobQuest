@@ -1,0 +1,5 @@
+Jack is a rising graduate student who is about to graduate. He is graduating with a bachelor's in computer science. Though Jack is still not certain about his career path.
+
+Since he was feeling uncertain Jack decided to talk to his advisor. His advisor gave him some advice but he still was certain and wanted more information about actual jobs in his area. The advisor noticed Jack’s uncertainty so he recommended that he try using Job Quest an online job counseling website. Jack goes to the site and is asked to take a quiz. The quiz asks him various questions like what he knows and what he wants to do as a job. After taking the quiz he is given a recommendation of what careers to look into. He is then prompted to look at further into the jobs through an AI text input which provides more detailed information. Jack then gets the option to download his results if he makes an account.
+
+Based on this scenario we will need to have some form of login feature along with a website that has a quiz in it. Also, we will need a way of sending the user's answers to an AI inorder to give them better advice.
