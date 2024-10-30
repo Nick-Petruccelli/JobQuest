@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobQuest - Computer Science Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+    </header>
+
+    <main>
+        <h2>Find Your Ideal Computer Science Field</h2>
+        <form id="quiz-form">
+            <label>1. Do you enjoy solving logical problems?</label><br>
+            <input type="radio" name="q1" value="Yes"> Yes<br>
+            <input type="radio" name="q1" value="No"> No<br>
+
+            <label>2. Are you more interested in hardware or software?</label><br>
+            <input type="radio" name="q2" value="Hardware"> Hardware<br>
+            <input type="radio" name="q2" value="Software"> Software<br>
+
+            <label>3. Do you prefer working on individual projects or collaborating in a team?</label><br>
+            <input type="radio" name="q3" value="Individual"> Individual<br>
+            <input type="radio" name="q3" value="Team"> Team<br>
+
+            <label>4. How comfortable are you with mathematics?</label><br>
+            <input type="radio" name="q4" value="Very Comfortable"> Very Comfortable<br>
+            <input type="radio" name="q4" value="Somewhat Comfortable"> Somewhat Comfortable<br>
+            <input type="radio" name="q4" value="Not Comfortable"> Not Comfortable<br>
+
+            <label>5. Do you prefer theoretical concepts or practical applications?</label><br>
+            <input type="radio" name="q5" value="Theoretical"> Theoretical<br>
+            <input type="radio" name="q5" value="Practical"> Practical<br>
+
+            <button type="submit">Submit Quiz</button>
+        </form>
+
+        <div id="result"></div>
+    </main>
+
+    <script src="quiz.js"></script>
+</body>
+</html>
