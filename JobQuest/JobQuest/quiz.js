@@ -17,7 +17,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
     3. Prefers individual projects or team collaboration: ${responses.q3}.
     4. Comfort level with mathematics: ${responses.q4}.
     5. Prefers theoretical concepts or practical applications: ${responses.q5}.
-    Based on these responses, please recommend a computer science job that aligns with the user's skills, interests, and preferences, such as software engineering, data science, cybersecurity, or machine learning. Briefly describe the job’s typical responsibilities and how it matches their profile.`;
+    Based on these responses, please recommend a computer science job that aligns with the user's skills, interests, and preferences, such as software engineering, data science, cybersecurity, or machine learning. Only list the name of the job and nothing else. Give 3 recomendations seperated by commas`;
 
     // Send the request to ChatGPT
     try {
@@ -25,7 +25,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': ''
+                'Authorization': 'Bearer '+''
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
@@ -37,11 +37,17 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
         if (!response.ok) throw new Error('API error');
 
         const data = await response.json();
-        const recommendedJob = data.choices[0].message.content.trim();
+        const recommendedJobStr = data.choices[0].message.content.trim();
+        const recommendedJobList = recommendedJobStr.split(", ");
+        console.log(recommendedJobStr);
+        console.log(recommendedJobList);
 
         // Display the result to the user
         const resultContainer = document.getElementById('result');
-        resultContainer.innerHTML = `<h3>Recommended Field:</h3><p>${recommendedJob}</p>`;
+        resultContainer.innerHTML = `<h3>Recommended Fields:</h3>`;
+        for(const job of recommendedJobList){
+            resultContainer.innerHTML += `<button>${job}</button>`;
+        }
 
         // Check if the user is logged in
         const loggedInUser = localStorage.getItem('loggedInUser');
@@ -51,7 +57,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
             saveQuizResponse(loggedInUser, responses, recommendedJob);
         } else {
             // If user is not logged in, store temporarily and prompt to save
-            sessionStorage.setItem('tempQuizResult', JSON.stringify({ responses, recommendedJob }));
+            sessionStorage.setItem('tempQuizResult', JSON.stringify({ responses, recommendedJobStr }));
 
             resultContainer.innerHTML += `
                 <div>
