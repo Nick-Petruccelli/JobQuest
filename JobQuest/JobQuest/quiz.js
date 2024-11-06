@@ -1,4 +1,11 @@
-document.getElementById('quiz-form').addEventListener('submit', async function(event) {
+document.getElementById('quiz-form').addEventListener('submit', formSubmit);
+
+async function formSubmit(e){
+    await getApiResults(e);
+    addResultEventListners();
+}
+
+async function getApiResults(event) {
     event.preventDefault();
 
     // Gather responses
@@ -17,7 +24,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
     3. Prefers individual projects or team collaboration: ${responses.q3}.
     4. Comfort level with mathematics: ${responses.q4}.
     5. Prefers theoretical concepts or practical applications: ${responses.q5}.
-    Based on these responses, please recommend a computer science job that aligns with the user's skills, interests, and preferences, such as software engineering, data science, cybersecurity, or machine learning. Briefly describe the job’s typical responsibilities and how it matches their profile.`;
+    Based on these responses, please recommend a computer science job that aligns with the user's skills, interests, and preferences, such as software engineering, data science, cybersecurity, or machine learning. Only list the name of the job and nothing else. Give 3 recomendations seperated by commas. ex "Software Engineer, cybersecurity, ml engineer"`;
 
     // Send the request to ChatGPT
     try {
@@ -25,7 +32,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': ''
+                'Authorization': 'Bearer '+'',
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
@@ -37,11 +44,21 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
         if (!response.ok) throw new Error('API error');
 
         const data = await response.json();
-        const recommendedJob = data.choices[0].message.content.trim();
+        const recommendedJobStr = data.choices[0].message.content.trim();
+        const recommendedJobList = recommendedJobStr.split(", ");
+        console.log(recommendedJobStr);
+        console.log(recommendedJobList);
 
         // Display the result to the user
         const resultContainer = document.getElementById('result');
-        resultContainer.innerHTML = `<h3>Recommended Field:</h3><p>${recommendedJob}</p>`;
+        resultContainer.innerHTML = `<h3>Recommended Fields:</h3>`;
+        let i = 0;
+        for(const job of recommendedJobList){
+            const btn = document.createElement("button");
+            btn.innerText = job;
+            btn.classList.add(`resultBtn${i++}`);
+            resultContainer.appendChild(btn);
+        }
 
         // Check if the user is logged in
         const loggedInUser = localStorage.getItem('loggedInUser');
@@ -51,7 +68,7 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
             saveQuizResponse(loggedInUser, responses, recommendedJob);
         } else {
             // If user is not logged in, store temporarily and prompt to save
-            sessionStorage.setItem('tempQuizResult', JSON.stringify({ responses, recommendedJob }));
+            sessionStorage.setItem('tempQuizResult', JSON.stringify({ responses, recommendedJobStr }));
 
             resultContainer.innerHTML += `
                 <div>
@@ -69,7 +86,17 @@ document.getElementById('quiz-form').addEventListener('submit', async function(e
         console.error('Error:', error);
         document.getElementById('result').textContent = 'Sorry, there was an error processing your request.';
     }
-});
+}
+
+function addResultEventListners(){
+    const resultContainer = document.getElementById('result');
+    console.log(resultContainer.childNodes);
+    for(let i=0;i<3;i++){
+        const btn = document.getElementsByClassName(`resultBtn${i}`)[0];
+        console.log(btn);
+        btn.addEventListener("click", loadResults);
+    }
+}
 
 // Function to save quiz response to a specific user's profile
 function saveQuizResponse(username, responses, recommendedJob) {
@@ -88,4 +115,9 @@ function promptSignUp() {
         <p>You need to create an account to save your response or get more information.</p>
         <button onclick="window.location.href='login.html'">Sign Up or Log In</button>
     `;
+}
+
+async function loadResults(e){
+    localStorage.setItem("selectedJob", e.target.innerText);
+    window.location.href = "results.html";
 }
