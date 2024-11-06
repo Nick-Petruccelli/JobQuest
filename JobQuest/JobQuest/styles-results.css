@@ -88,6 +88,11 @@ main{
     align-items: center;
 }
 
+.desc-container{
+    width: 70%;
+
+}
+
 .skills-proj-container{
     display: grid;
     justify-content: center;
