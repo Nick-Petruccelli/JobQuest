@@ -118,7 +118,6 @@ function promptSignUp() {
 }
 
 async function loadResults(e){
-    console.log("hit");
-    //document.localStorage.setItem("selectedJob", this.innerText);
-
+    localStorage.setItem("selectedJob", e.target.innerText);
+    window.location.href = "results.html";
 }
