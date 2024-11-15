@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./images/PenguinLogo.png">
     <title>JobQuest - Computer Science Quiz</title>
-    <link rel="stylesheet" href="styles-results.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+        <div class="header-left">
+            <img src="./images/PenguinLogo.png" alt="Logo" id="header-image">
+            <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+        </div>
+        <button id="save-response" style="display: none;">Save this response</button>
     </header>
 
     <main>
         <h2 class="job-title">Job Title</h2>
-        <div class="desc-container">
-            
+        <div id="result" class="desc-container">
+            <!-- Job recommendations will appear here -->
         </div>
         <div class="skills-proj-container">
             <div class="skills-container">
@@ -24,6 +29,15 @@
             </div>
             <div class="proj-container">
                 <h3>Project</h3>
+            </div>
+        </div>
+        <div>
+            <button id="more-info">More Info</button>
+        </div>
+        <div id="signup-modal">
+            <div class="modal-content">
+                <h3>You must be logged in to save this response.</h3>
+                <button id="close-modal-btn">Close</button>
             </div>
         </div>
     </main>

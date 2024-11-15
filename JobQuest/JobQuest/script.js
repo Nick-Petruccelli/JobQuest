@@ -8,7 +8,10 @@ document.getElementById("quiz-btn").addEventListener("click", function() {
 });
 
 // Check if the user is logged in
-if (localStorage.getItem("loggedInUser")) {
+const loggedInUser = localStorage.getItem("loggedInUser");
+
+if (loggedInUser) {
+    console.log('Logged in as:', loggedInUser); // Debugging line to confirm the logged-in user
     
     document.getElementById("login-btn").style.display = "none";
     document.getElementById("profile-container").style.display = "flex";
@@ -23,4 +26,6 @@ if (localStorage.getItem("loggedInUser")) {
         localStorage.removeItem("loggedInUser"); 
         window.location.href = "home.html";  
     });
+} else {
+    console.log('No user logged in');
 }

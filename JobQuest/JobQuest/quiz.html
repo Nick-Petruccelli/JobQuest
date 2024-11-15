@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./images/PenguinLogo.png">
     <title>JobQuest - Computer Science Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+        <div class="header-left">
+            <img src="./images/PenguinLogo.png" alt="Logo" id="header-image">
+            <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+        </div>
+        <div id="header-right">
+            <button id="login-btn">Login</button>
+            <div id="profile-container" style="display:none;">
+                <button id="profile-btn">My Profile</button>
+                <button id="logout-btn">Logout</button>
+            </div>
+        </div>
     </header>
 
     <main>
@@ -40,6 +51,42 @@
 
         <div id="result"></div>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const header = document.querySelector("header");
+
+            // Clear header content and set up elements with "My Profile" above the login/logout button
+            header.innerHTML = `
+                <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+                <div id="header-buttons" style="display: flex; flex-direction: column; align-items: flex-end;">
+                    <button id="profile-btn" style="display: none; margin-bottom: 5px;">My Profile</button>
+                    <button id="auth-btn">Login</button>
+                </div>
+            `;
+
+            // Determine login state
+            const loggedInUser = localStorage.getItem('loggedInUser');
+
+            // Show appropriate button based on login status
+            const profileBtn = document.getElementById("profile-btn");
+            const authBtn = document.getElementById("auth-btn");
+
+            if (loggedInUser) {
+                profileBtn.style.display = "inline"; // Show 'My Profile' if logged in
+                authBtn.innerText = "Logout"; // Change to 'Logout' if logged in
+                profileBtn.addEventListener("click", () => window.location.href = "profile.html");
+                authBtn.addEventListener("click", () => {
+                    localStorage.removeItem("loggedInUser"); // Log out
+                    window.location.reload(); // Refresh to update header
+                });
+            } else {
+                profileBtn.style.display = "none"; // Hide 'My Profile' if logged out
+                authBtn.innerText = "Login"; // Show 'Login' if logged out
+                authBtn.addEventListener("click", () => window.location.href = "login.html");
+            }
+        });
+    </script>
 
     <script src="quiz.js"></script>
 </body>
