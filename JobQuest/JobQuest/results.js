@@ -6,11 +6,11 @@ async function loadPage() {
         return;
     }
 
-    console.log('Selected Job:', selectedJob); // Checks the selected job
+    console.log('Selected Job:', selectedJob); // Debugging
     loadTitle(selectedJob);
 
     const apiOut = await getApiResults(selectedJob);
-    console.log('API Output:', apiOut); // Debugging line to check the API output
+    console.log('API Output:', apiOut); // Debugging
 
     if (!apiOut) {
         document.getElementById('result').textContent = 'Error fetching job details.';
@@ -18,29 +18,30 @@ async function loadPage() {
     }
 
     const parsedData = parseApiResults(apiOut);
-    console.log('Parsed Data:', parsedData); // Checks parsed data
+    console.log('Parsed Data:', parsedData); // Debugging
 
     if (parsedData) {
         loadDesc(parsedData["jobDescription"]);
         loadSkills(parsedData["skills"]);
         loadProject(parsedData["projectName"], parsedData["projectDescription"]);
 
-        // Save the parsed job data into localStorage to be used in saveQuizResponse
+        // Save the parsed job data into localStorage for use when saving the response
         localStorage.setItem("jobData", JSON.stringify(parsedData));
 
-        // Save skills and project details to localStorage for later use when saving the response
+        // Save skills and project details separately for later use
         localStorage.setItem("skillsList", JSON.stringify(parsedData["skills"]));
         localStorage.setItem("projectDetails", JSON.stringify({
             projectName: parsedData["projectName"],
             projectDescription: parsedData["projectDescription"]
         }));
 
-        // Check if quiz result is stored in sessionStorage for non-logged in users
+        // Save job description explicitly
+        localStorage.setItem("jobDescription", parsedData["jobDescription"]);
+
+        // Handle temporary quiz result
         const tempQuizResult = sessionStorage.getItem('tempQuizResult');
         if (tempQuizResult) {
-            const { responses, recommendedJobStr } = JSON.parse(tempQuizResult);
-            console.log('Temp Quiz Result:', responses, recommendedJobStr);
-            // Display job recommendations, etc. as you do for logged-in users.
+            console.log('Temp Quiz Result:', JSON.parse(tempQuizResult));
         }
     } else {
         document.getElementById('result').textContent = 'Error processing API response.';
@@ -58,7 +59,7 @@ async function getApiResults(job) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer 
+                'Authorization': 'Bearer '
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
@@ -104,54 +105,116 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveResponseBtn = document.getElementById('save-response');
     const loggedInUser = localStorage.getItem('loggedInUser');
 
-    console.log('Logged In User:', loggedInUser); // Debugging log
-
-    // Ensure the button is always displayed, even for logged-out users
     if (saveResponseBtn) {
-        saveResponseBtn.style.display = 'block'; // Always show the button
+        saveResponseBtn.style.display = 'block'; // Ensure the button is visible
 
         saveResponseBtn.addEventListener('click', () => {
             if (!loggedInUser) {
-                console.log('User is not logged in. Prompting signup or login.');
-                promptSignUp(); // Show signup prompt for logged-out users
+                console.warn('User is not logged in. Prompting signup or login.');
+                promptSignUp();
                 return;
             }
 
-            // For logged-in users, proceed to save the response
-            const jobData = JSON.parse(localStorage.getItem("jobData"));
-            const quizResponse = sessionStorage.getItem('tempQuizResult') || localStorage.getItem('quizResult');
+            const quizResponse = getQuizResponse();
+            const jobData = JSON.parse(localStorage.getItem("jobData")) || {};
+            console.log("Parsed Job Data:", jobData);
+
+            if (!jobData.job) {
+                 console.error("Job data is missing. Verify API and localStorage handling.");
+            }
+
             if (!quizResponse) {
-                console.error("Quiz response not found.");
+                console.error("Quiz response not found. Cannot proceed with saving.");
                 return;
             }
 
             const quizData = JSON.parse(quizResponse);
-            saveQuizResponse(loggedInUser, quizData, jobData);
+
+            // Ensure skills and project details are valid
+            const skillsList = getSkillsList(jobData);
+            const projectDetails = getProjectDetails(jobData);
+
+            // Fallbacks for incomplete data
+            const validJobData = {
+                job: jobData.job || localStorage.getItem('selectedJob') || 'Unknown Job',
+                jobDescription: jobData.jobDescription || 'Description not available.',
+                skills: skillsList.length > 0 ? skillsList : ['No skills available.'],
+                projectName: projectDetails.projectName || 'Unnamed Project',
+                projectDescription: projectDetails.projectDescription || 'No description available.'
+            };
+
+            console.log("Saving Data:", { quizData, validJobData });
+
+            saveQuizResponse(loggedInUser, quizData, validJobData, validJobData.skills, {
+                projectName: validJobData.projectName,
+                projectDescription: validJobData.projectDescription
+            });
         });
     }
 });
 
-function saveQuizResponse(username, quizData, jobData) {
+/**
+ * Utility function to retrieve quiz response from storage.
+ */
+function getQuizResponse() {
+    return sessionStorage.getItem('tempQuizResult') || localStorage.getItem('quizResult');
+}
+
+/**
+ * Utility function to extract skills list with fallback handling.
+ */
+function getSkillsList(jobData) {
+    return jobData.skills || JSON.parse(localStorage.getItem('skillsList')) || [];
+}
+
+/**
+ * Utility function to extract project details with fallback handling.
+ */
+function getProjectDetails(jobData) {
+    const fallbackProjectDetails = JSON.parse(localStorage.getItem('projectDetails')) || {};
+    return {
+        projectName: jobData.projectName || fallbackProjectDetails.projectName || '',
+        projectDescription: jobData.projectDescription || fallbackProjectDetails.projectDescription || ''
+    };
+}
+
+/**
+ * Utility function to validate skills and project details.
+ */
+function isValidData(skillsList, projectDetails) {
+    return skillsList.length > 0 && projectDetails.projectName && projectDetails.projectDescription;
+}
+
+function saveQuizResponse(username, quizData, jobData, skillsList, projectDetails) {
+    if (!jobData || !skillsList || !projectDetails) {
+        console.error("Incomplete data to save response:", { jobData, skillsList, projectDetails });
+        return;
+    }
+
     const responseData = {
-        responses: quizData.responses,
-        recommendedJobStr: quizData.recommendedJobStr,
-        job: jobData.job,
-        jobDescription: jobData.jobDescription,
-        skills: jobData.skills,
-        projectName: jobData.projectName,
-        projectDescription: jobData.projectDescription,
+        responses: quizData.responses || [],
+        recommendedJobStr: quizData.recommendedJob || "No recommendation",
+        job: jobData.job || "Unknown",
+        jobDescription: jobData.jobDescription || "No description available",
+        skills: skillsList || [],
+        projectName: projectDetails.projectName || "No project name",
+        projectDescription: projectDetails.projectDescription || "No project description",
         date: new Date().toLocaleString()
     };
+
+    console.log("Data to Save:", responseData);
 
     const userQuizHistory = JSON.parse(localStorage.getItem(`${username}_quizHistory`)) || [];
     userQuizHistory.push(responseData);
     localStorage.setItem(`${username}_quizHistory`, JSON.stringify(userQuizHistory));
 
-    console.log('Response saved successfully!');
+    console.log('Response saved successfully with full data!', responseData);
+
+    showSavedPopup();
 }
 
 function promptSignUp() {
-    document.body.innerHTML += `
+    document.body.innerHTML += ` 
         <div id="signup-prompt" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: rgba(0, 0, 0, 0.7); color: white; border-radius: 8px;">
             <p>You need to create an account to save your response.</p>
             <button onclick="window.location.href='login.html'">Sign Up or Log In</button>
@@ -211,5 +274,21 @@ function loadProject(projName, projDesc) {
         const fallback = document.createElement("p");
         fallback.innerText = 'No project details available.';
         projContainer.appendChild(fallback);
+    }
+}
+
+function showSavedPopup() {
+    document.body.innerHTML += ` 
+        <div id="saved-popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: rgba(11, 197, 235, 1); color: white; border-radius: 8px; text-align: center; z-index: 1000;">
+            <p>Your results have been successfully saved to your account!</p>
+            <button onclick="closeSavedPopup()">Close</button>
+        </div>
+    `;
+}
+
+function closeSavedPopup() {
+    const popup = document.getElementById('saved-popup');
+    if (popup) {
+        popup.remove();
     }
 }
