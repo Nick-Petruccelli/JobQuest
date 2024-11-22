@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 
+                    'Authorization': 'Bearer '
                 },
                 body: JSON.stringify({
                     model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'tempQuizResult',
                 JSON.stringify({
                     responses,
-                    recommendedJob: recommendedJobStr,
+                    recommendedJob: recommendedJobList,
                 })
             );
 

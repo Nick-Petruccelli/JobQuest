@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             loginStatus.innerText = "Login successful! Redirecting...";
             loginStatus.style.color = "green";
 
-            setTimeout(() => window.location.href = "home.html", 1000); // Redirect after 1 second
+            setTimeout(() => window.location.href = "home.html", 500); // Redirect after 1 second
         } else {
             loginStatus.innerText = "Invalid credentials.";
             loginStatus.style.color = "red";
@@ -66,23 +66,45 @@ function toggleForm(showFormId, hideFormId) {
 }
 
 // Function to save a quiz response to the logged-in user's profile
-function saveQuizResponse(username, quizData) {
+function saveQuizResponse(username, quizData, skillsList = [], projectDetails = {}) {
     const userQuizHistory = JSON.parse(localStorage.getItem(`${username}_quizHistory`)) || [];
-    userQuizHistory.push({
-        responses: quizData.responses,
-        recommendedJob: quizData.recommendedJob,
+
+    const newQuizEntry = {
+        responses: quizData.responses || [],
+        recommendedJob: quizData.recommendedJob || [],
+        jobDescription: quizData.jobDescription || '',
+        skills: skillsList,
+        projectName: projectDetails.projectName || '',
+        projectDescription: projectDetails.projectDescription || '',
         date: new Date().toLocaleString(),
-        jobDetails: quizData.jobDetails || {}
-    });
+    };
+
+    userQuizHistory.push(newQuizEntry);
     localStorage.setItem(`${username}_quizHistory`, JSON.stringify(userQuizHistory));
 }
 
 // Function to handle any pending quiz response from sessionStorage
 function handlePendingQuizResponse(username) {
     const pendingResponse = sessionStorage.getItem("tempQuizResult");
-    if (pendingResponse) {
-        const quizData = JSON.parse(pendingResponse);
-        saveQuizResponse(username, quizData);
-        sessionStorage.removeItem("tempQuizResult"); 
+    if (!pendingResponse) return; // Exit if no pending response
+
+    const quizData = JSON.parse(pendingResponse);
+
+    // Fetch skills list and project details if available
+    const skillsList = JSON.parse(localStorage.getItem("skillsList")) || [];
+    const projectDetails = JSON.parse(localStorage.getItem("projectDetails")) || {};
+
+    // Ensure jobDescription is included
+    if (!quizData.jobDescription) {
+        quizData.jobDescription = localStorage.getItem("jobDescription") || '';
     }
+
+    // Save the response to the user's profile
+    saveQuizResponse(username, quizData, skillsList, projectDetails);
+
+    // Clean up temporary data
+    sessionStorage.removeItem("tempQuizResult");
+    localStorage.removeItem("skillsList");
+    localStorage.removeItem("projectDetails");
+    localStorage.removeItem("jobDescription");
 }
