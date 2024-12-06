@@ -55,11 +55,13 @@ async function getApiResults(job) {
 
     // Send the request to ChatGPT
     try {
+        const apiKeyResponse = await fetch('apiKey/key.txt');
+        const apiKey = await apiKeyResponse.text();
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '
+                'Authorization': 'Bearer '+apiKey
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",  // or "gpt-4" if you have access

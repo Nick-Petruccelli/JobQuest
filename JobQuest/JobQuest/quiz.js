@@ -1,8 +1,19 @@
-document.addEventListener('DOMContentLoaded', () => {
+main();
+//document.addEventListener('DOMContentLoaded', loadPage);
+
+async function main(){
+    const apiKeyResponse = await fetch("apiKey/key.txt");
+    const apiKey = await apiKeyResponse.text();
+    loadPage(apiKey);
+}
+
+async function loadPage(apiKey){
     document.getElementById('quiz-form').addEventListener('submit', formSubmit);
+    console.log("hit");
 
     async function formSubmit(e) {
         await getApiResults(e);
+        console.log("hit");
         addResultEventListeners();
     }
 
@@ -29,11 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Send the request to ChatGPT
         try {
+            console.log(apiKey);
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer '
+                    'Authorization': 'Bearer '+apiKey,
                 },
                 body: JSON.stringify({
                     model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
@@ -88,4 +100,4 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem("selectedJob", e.target.innerText);
         window.location.href = "results.html";
     }
-});
+}
