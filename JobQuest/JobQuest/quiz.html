@@ -8,39 +8,47 @@
 </head>
 <body>
     <header>
+        <div class = "header-left">
+            <img src="/images/penguin logo.png" alt="Logo" id="header-image">
         <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+        </div>
     </header>
 
     <main>
         <h2>Find Your Ideal Computer Science Field</h2>
         <form id="quiz-form">
-            <label>1. Do you enjoy solving logical problems?</label><br>
-            <input type="radio" name="q1" value="Yes"> Yes<br>
-            <input type="radio" name="q1" value="No"> No<br>
-
-            <label>2. Are you more interested in hardware or software?</label><br>
-            <input type="radio" name="q2" value="Hardware"> Hardware<br>
-            <input type="radio" name="q2" value="Software"> Software<br>
-
-            <label>3. Do you prefer working on individual projects or collaborating in a team?</label><br>
-            <input type="radio" name="q3" value="Individual"> Individual<br>
-            <input type="radio" name="q3" value="Team"> Team<br>
-
-            <label>4. How comfortable are you with mathematics?</label><br>
-            <input type="radio" name="q4" value="Very Comfortable"> Very Comfortable<br>
-            <input type="radio" name="q4" value="Somewhat Comfortable"> Somewhat Comfortable<br>
-            <input type="radio" name="q4" value="Not Comfortable"> Not Comfortable<br>
-
-            <label>5. Do you prefer theoretical concepts or practical applications?</label><br>
-            <input type="radio" name="q5" value="Theoretical"> Theoretical<br>
-            <input type="radio" name="q5" value="Practical"> Practical<br>
-
+            <label for="q1">1. Do you enjoy solving logical problems?</label><br>
+            <input type="radio" name="q1" value="Yes" id="q1-yes"> <label for="q1-yes">Yes</label><br>
+            <input type="radio" name="q1" value="No" id="q1-no"> <label for="q1-no">No</label><br>
+        
+            <label for="q2">2. Are you more interested in hardware or software?</label><br>
+            <input type="radio" name="q2" value="Hardware" id="q2-hardware"> <label for="q2-hardware">Hardware</label><br>
+            <input type="radio" name="q2" value="Software" id="q2-software"> <label for="q2-software">Software</label><br>
+        
+            <label for="q3">3. Do you prefer working on individual projects or collaborating in a team?</label><br>
+            <input type="radio" name="q3" value="Individual" id="q3-individual"> <label for="q3-individual">Individual</label><br>
+            <input type="radio" name="q3" value="Team" id="q3-team"> <label for="q3-team">Team</label><br>
+        
+            <label for="q4">4. How comfortable are you with mathematics?</label><br>
+            <input type="radio" name="q4" value="Very Comfortable" id="q4-comfortable"> <label for="q4-comfortable">Very Comfortable</label><br>
+            <input type="radio" name="q4" value="Somewhat Comfortable" id="q4-somewhat"> <label for="q4-somewhat">Somewhat Comfortable</label><br>
+            <input type="radio" name="q4" value="Not Comfortable" id="q4-not-comfortable"> <label for="q4-not-comfortable">Not Comfortable</label><br>
+        
+            <label for="q5">5. Do you prefer theoretical concepts or practical applications?</label><br>
+            <input type="radio" name="q5" value="Theoretical" id="q5-theoretical"> <label for="q5-theoretical">Theoretical</label><br>
+            <input type="radio" name="q5" value="Practical" id="q5-practical"> <label for="q5-practical">Practical</label><br>
+        
             <button type="submit">Submit Quiz</button>
         </form>
+        
 
         <div id="result"></div>
     </main>
 
     <script src="quiz.js"></script>
 </body>
+<footer class="footer">
+    <p class="copyright">&copy; 2024 JobQuest</p>
+    <button onclick="window.location.href='about.html'" class="about-us-btn">About Us</button>
+</footer>
 </html>

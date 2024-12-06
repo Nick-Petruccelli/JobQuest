@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JobQuest</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="./images/logo.png">
+    <link rel="icon" href="/images/penguin logo.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+ 
 </head>
 <body>
     <header>
-        <h1>JobQuest</h1>
+        <div class = "header-left">
+            <img src="/images/penguin logo.png" alt="Logo" id="header-image">
+            <h1>JobQuest</h1>
+        </div>
         <div id="header-right">
             <button id="login-btn">Login</button>
             <div id="profile-container" style="display:none;">
@@ -18,15 +23,27 @@
             </div>
         </div>
     </header>
+    
+
+    <main>
+        <div id="quiz-container">
+            <div class="rounded-rectangle">
+                <h1>Welcome to JobQuest!</h1>
+                <p>This quiz is a tool that allows you to explore the many fields of Computer Science. You will find out their purpose, skill set needed, and what projects can build such experience.</p>
+                <p>You can retake the quiz as many times as you desire. It is reccomended to take this quiz a couple times and experiment to find what interests you the most.</p>
+                <p>Press the "Take Quiz" button to begin.</p>
+            </div>
+            <button id="quiz-btn">Take Quiz</button>
+            
+        </div>
+    
+    </main>
 
     <footer class="footer">
         <p class="copyright">&copy; 2024 JobQuest</p>
         <button onclick="window.location.href='about.html'" class="about-us-btn">About Us</button>
     </footer>
 
-    <main>
-        <button id="quiz-btn">Take Quiz</button>
-    </main>
 
 
     <script src="script.js"></script>

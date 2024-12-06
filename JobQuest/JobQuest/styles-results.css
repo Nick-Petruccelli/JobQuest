@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -82,7 +82,7 @@ header {
 
 /*__________________main____________________*/
 
-main{
+/* main{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,4 +122,4 @@ main{
     border-radius: 5px;
     width: 80%;
     height: 80%;
-}
+} */

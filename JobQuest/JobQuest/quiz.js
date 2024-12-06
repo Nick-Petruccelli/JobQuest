@@ -32,7 +32,7 @@ async function getApiResults(event) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+'',
+                'Authorization': 'Bearer' + '',
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
