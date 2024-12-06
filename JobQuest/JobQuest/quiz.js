@@ -38,21 +38,20 @@ async function loadPage(apiKey){
         5. Prefers theoretical concepts or practical applications: ${responses.q5}.
         Based on these responses, please recommend a computer science job that aligns with the user's skills, interests, and preferences, such as software engineering, data science, cybersecurity, or machine learning. Only list the name of the job and nothing else. Give 3 recommendations separated by commas. ex "Software Engineer, cybersecurity, ml engineer"`;
 
-        // Send the request to ChatGPT
-        try {
-            console.log(apiKey);
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer '+apiKey,
-                },
-                body: JSON.stringify({
-                    model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
-                    messages: [{ role: "user", content: query }],
-                    max_tokens: 150
-                })
-            });
+    // Send the request to ChatGPT
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer' + '',
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
+                messages: [{ role: "user", content: query }],
+                max_tokens: 150
+            })
+        });
 
             if (!response.ok) throw new Error('API error');
 
