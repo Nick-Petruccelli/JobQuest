@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = async function() {
     // Check if the user is logged in
     const loggedInUser = localStorage.getItem('loggedInUser');
     
@@ -8,7 +8,9 @@ window.onload = function() {
     }
 
     // Retrieve quiz history from localStorage specific to the logged-in user
-    const quizHistory = JSON.parse(localStorage.getItem(`${loggedInUser}_quizHistory`)) || [];
+    const storedUserRequest = await fetch('http://127.0.0.1:5000/get-user/'+loggedInUser);
+    const storedUser = await storedUserRequest.json();
+    const quizHistory = storedUser['quizResults'];
     const quizHistoryContainer = document.getElementById('quiz-history');
 
     if (quizHistory.length === 0) {

@@ -53,9 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log(loginUsername);
         const storedUserRequest = await fetch('http://127.0.0.1:5000/get-user/'+loginUsername);
-        console.log(storedUserRequest);
         const storedUser = await storedUserRequest.json();
-        console.log(storedUser);
         if (storedUser && storedUser['password'] === loginPassword) {
             localStorage.setItem("loggedInUser", loginUsername);
 
