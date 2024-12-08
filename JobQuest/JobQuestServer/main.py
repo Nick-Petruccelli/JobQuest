@@ -26,9 +26,9 @@ def create_user():
 def get_user(username):
     with open('data/userData.json', 'r') as file:
         file_data = json.load(file)
-        user_data = file_data[username]
-        if user_data == None:
+        if username not in file_data:
             return username, 400
+        user_data = file_data[username]
         return jsonify(user_data), 200
 
 

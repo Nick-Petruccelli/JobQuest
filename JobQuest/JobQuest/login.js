@@ -53,6 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log(loginUsername);
         const storedUserRequest = await fetch('http://127.0.0.1:5000/get-user/'+loginUsername);
+        if(!storedUserRequest.ok){
+            loginStatus.innerText = "Invalid username.";
+            loginStatus.style.color = "red";
+            return;
+        }
         const storedUser = await storedUserRequest.json();
         if (storedUser && storedUser['password'] === loginPassword) {
             localStorage.setItem("loggedInUser", loginUsername);
@@ -64,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => window.location.href = "home.html", 500); // Redirect after 1 second
         } else {
-            loginStatus.innerText = "Invalid credentials.";
+            loginStatus.innerText = "Invalid password.";
             loginStatus.style.color = "red";
         }
     });
