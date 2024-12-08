@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Create account form submission
-    document.getElementById("create-account-form").addEventListener("submit", (e) => {
+    console.log("hit");
+    document.getElementById("create-account-form").addEventListener("submit", async(e) => {
         e.preventDefault();
 
         const newUsername = document.getElementById("new-username").value.trim();
@@ -23,8 +24,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Save new user and log them in
-        localStorage.setItem(newUsername, JSON.stringify({ password: newPassword, quizResults: [] }));
-        localStorage.setItem("loggedInUser", newUsername);
+        console.log('hit');
+        const user_data = {'username':newUsername, 'password': newPassword, 'quizResults': [] }
+        const response = await fetch('http://127.0.0.1:5000/create-user', {
+            method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify(user_data)}
+            );
+
 
         handlePendingQuizResponse(newUsername); // Handle any pending quiz response
 
@@ -35,15 +44,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Login form submission
-    document.getElementById("login-form").addEventListener("submit", (e) => {
+    document.getElementById("login-form").addEventListener("submit", async(e) => {
         e.preventDefault();
 
         const loginUsername = document.getElementById("login-username").value.trim();
         const loginPassword = document.getElementById("login-password").value.trim();
         const loginStatus = document.getElementById("login-status");
 
-        const storedUser = JSON.parse(localStorage.getItem(loginUsername));
-        if (storedUser && storedUser.password === loginPassword) {
+        console.log(loginUsername);
+        const storedUserRequest = await fetch('http://127.0.0.1:5000/get-user/'+loginUsername);
+        if(!storedUserRequest.ok){
+            loginStatus.innerText = "Invalid username.";
+            loginStatus.style.color = "red";
+            return;
+        }
+        const storedUser = await storedUserRequest.json();
+        if (storedUser && storedUser['password'] === loginPassword) {
             localStorage.setItem("loggedInUser", loginUsername);
 
             handlePendingQuizResponse(loginUsername); // Handle any pending quiz response
@@ -53,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => window.location.href = "home.html", 500); // Redirect after 1 second
         } else {
-            loginStatus.innerText = "Invalid credentials.";
+            loginStatus.innerText = "Invalid password.";
             loginStatus.style.color = "red";
         }
     });
@@ -66,9 +82,8 @@ function toggleForm(showFormId, hideFormId) {
 }
 
 // Function to save a quiz response to the logged-in user's profile
-function saveQuizResponse(username, quizData, skillsList = [], projectDetails = {}) {
-    const userQuizHistory = JSON.parse(localStorage.getItem(`${username}_quizHistory`)) || [];
-
+async function saveQuizResponse(username, quizData, skillsList = [], projectDetails = {}) {
+    console.log('hit');
     const newQuizEntry = {
         responses: quizData.responses || [],
         recommendedJob: quizData.recommendedJob || [],
@@ -79,12 +94,18 @@ function saveQuizResponse(username, quizData, skillsList = [], projectDetails = 
         date: new Date().toLocaleString(),
     };
 
-    userQuizHistory.push(newQuizEntry);
-    localStorage.setItem(`${username}_quizHistory`, JSON.stringify(userQuizHistory));
+    const request = fetch('http://127.0.0.1:5000/save-quiz/'+username, {
+        method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify(newQuizEntry)
+        })
 }
 
 // Function to handle any pending quiz response from sessionStorage
-function handlePendingQuizResponse(username) {
+async function handlePendingQuizResponse(username) {
+    console.log('hpqr');
     const pendingResponse = sessionStorage.getItem("tempQuizResult");
     if (!pendingResponse) return; // Exit if no pending response
 

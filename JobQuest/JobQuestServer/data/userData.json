@@ -1,0 +1,68 @@
+{
+    "tod": {
+        "username": "tod",
+        "password": "tod",
+        "quizResults": [
+            {
+                "responses": {
+                    "q1": "Yes",
+                    "q2": "Hardware",
+                    "q3": "Individual",
+                    "q4": "Very Comfortable",
+                    "q5": "Theoretical"
+                },
+                "recommendedJob": [
+                    "Computer Systems Analyst",
+                    "Hardware Engineer",
+                    "Theoretical Computer Scientist"
+                ],
+                "jobDescription": "A Hardware Engineer designs, develops, and tests computer hardware components and systems.",
+                "skills": [
+                    "Knowledge of circuit design",
+                    "Proficiency in using CAD software",
+                    "Troubleshooting skills",
+                    "Ability to work with various tools and equipment",
+                    "Attention to detail",
+                    "Strong problem-solving skills",
+                    "Knowledge of computer architecture",
+                    "Understanding of electronic components",
+                    "Analytical thinking",
+                    "Teamwork skills"
+                ],
+                "projectName": "DIY Arduino Weather Station",
+                "projectDescription": "Build a weather station using an Arduino board to gain experience with circuit design, programming, and sensor integration.",
+                "date": "12/8/2024, 4:46:33 PM"
+            },
+            {
+                "responses": {
+                    "q1": "Yes",
+                    "q2": "Hardware",
+                    "q3": "Individual",
+                    "q4": "Very Comfortable",
+                    "q5": "Theoretical"
+                },
+                "recommendedJob": [
+                    "Hardware Engineer",
+                    "Data Engineer",
+                    "Theoretical Computer Scientist"
+                ],
+                "jobDescription": "A Hardware Engineer designs, tests, and maintains computer hardware components.",
+                "skills": [
+                    "Analog and digital circuit design",
+                    "Computer architecture",
+                    "PCB layout",
+                    "Firmware development",
+                    "Troubleshooting",
+                    "Problem-solving",
+                    "Critical thinking",
+                    "Attention to detail",
+                    "Collaboration",
+                    "Communication"
+                ],
+                "projectName": "Microcontroller-based LED Flashlight",
+                "projectDescription": "Design and build a microcontroller-based LED flashlight to practice circuit design, PCB layout, firmware development, and troubleshooting skills.",
+                "date": "12/8/2024, 5:12:42 PM"
+            }
+        ]
+    }
+}
