@@ -9,11 +9,9 @@ async function main(){
 
 async function loadPage(apiKey){
     document.getElementById('quiz-form').addEventListener('submit', formSubmit);
-    console.log("hit");
 
     async function formSubmit(e) {
         await getApiResults(e);
-        console.log("hit");
         addResultEventListeners();
     }
 
