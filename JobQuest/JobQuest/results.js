@@ -333,9 +333,9 @@ searchBtn.addEventListener('click', async function() {
             }
 
             const data = await response.json();
-
-            if (data.answer) {
-                answerContainer.innerHTML = `<p><strong>Answer:</strong> ${data.answer}</p>`;
+            const answer = data['choices'][0]['message']['content'];
+            if (answer) {
+                answerContainer.innerHTML = `<p><strong>Answer:</strong> ${answer}</p>`;
             } else {
                 answerContainer.innerHTML = `<p>Sorry, I couldn't find an answer to your question.</p>`;
             }
