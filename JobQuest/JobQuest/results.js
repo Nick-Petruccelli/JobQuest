@@ -294,3 +294,56 @@ function closeSavedPopup() {
         popup.remove();
     }
 }
+
+const moreInfoBtn = document.getElementById('more-info-btn');
+const searchBarContainer = document.getElementById('search-bar-container');
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+
+const answerContainer = document.createElement('div');
+document.body.appendChild(answerContainer);
+
+moreInfoBtn.addEventListener('click', function() {
+    searchBarContainer.style.display = searchBarContainer.style.display === 'none' ? 'block' : 'none';
+});
+
+searchBtn.addEventListener('click', async function() {
+    const query = searchInput.value.trim();
+    if (query) {
+        console.log('User search query:', query);
+
+        try {
+            const apiKeyResponse = await fetch('apiKey/key.txt');
+            const apiKey = await apiKeyResponse.text();
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+apiKey
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",  // or "gpt-4" if you have access
+                    messages: [{ role: "user", content: query }],
+                    max_tokens: 150
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch response from backend');
+            }
+
+            const data = await response.json();
+
+            if (data.answer) {
+                answerContainer.innerHTML = `<p><strong>Answer:</strong> ${data.answer}</p>`;
+            } else {
+                answerContainer.innerHTML = `<p>Sorry, I couldn't find an answer to your question.</p>`;
+            }
+        } catch (error) {
+            console.error('Error with fetching answer:', error);
+            answerContainer.innerHTML = `<p>There was an error while fetching the answer. Please try again later.</p>`;
+        }
+    } else {
+        alert('Please enter a question!');
+    }
+});

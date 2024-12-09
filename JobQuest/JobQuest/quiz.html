@@ -11,13 +11,15 @@
     <header>
         <div class = "header-left">
             <img src="./images/PenguinLogo.png" alt="Logo" id="header-image">
-            <h1>JobQuest</h1>
+            <h1><a href="home.html" id="title-link">JobQuest</a></h1>
         </div>
         <div id="header-right">
-            <button id="login-btn">Login</button>
-            <div id="profile-container" style="display:none;">
-                <button id="profile-btn">My Profile</button>
-                <button id="logout-btn">Logout</button>
+            <div id="header-buttons">
+                <button id="login-btn">Login</button>
+                <div id="profile-container" style="display:none;">
+                    <button id="profile-btn">My Profile</button>
+                    <button id="logout-btn">Logout</button>
+                </div>
             </div>
         </div>
     </header>
@@ -58,9 +60,12 @@
 
             // Clear header content and set up elements with "My Profile" above the login/logout button
             header.innerHTML = `
-                <h1><a href="home.html" id="title-link">JobQuest</a></h1>
-                <div id="header-buttons" style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <button id="profile-btn" style="display: none; margin-bottom: 5px;">My Profile</button>
+                <div class = "header-left">
+                    <img src="./images/PenguinLogo.png" alt="Logo" id="header-image">
+                    <h1><a href="home.html" id="title-link">JobQuest</a></h1>
+                </div>
+                <div id="header-buttons">
+                    <button id="profile-btn" style="display: none;">My Profile</button>
                     <button id="auth-btn">Login</button>
                 </div>
             `;
@@ -73,16 +78,16 @@
             const authBtn = document.getElementById("auth-btn");
 
             if (loggedInUser) {
-                profileBtn.style.display = "inline"; // Show 'My Profile' if logged in
-                authBtn.innerText = "Logout"; // Change to 'Logout' if logged in
+                profileBtn.style.display = "inline"; 
+                authBtn.innerText = "Logout";
                 profileBtn.addEventListener("click", () => window.location.href = "profile.html");
                 authBtn.addEventListener("click", () => {
-                    localStorage.removeItem("loggedInUser"); // Log out
-                    window.location.reload(); // Refresh to update header
+                    localStorage.removeItem("loggedInUser");
+                    window.location.reload();
                 });
             } else {
-                profileBtn.style.display = "none"; // Hide 'My Profile' if logged out
-                authBtn.innerText = "Login"; // Show 'Login' if logged out
+                profileBtn.style.display = "none";
+                authBtn.innerText = "Login";
                 authBtn.addEventListener("click", () => window.location.href = "login.html");
             }
         });
