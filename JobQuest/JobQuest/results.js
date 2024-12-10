@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loggedInUser = localStorage.getItem('loggedInUser');
 
     if (saveResponseBtn) {
-        saveResponseBtn.style.display = 'block'; // Ensure the button is visible
+        saveResponseBtn.style.display = 'block';
 
         saveResponseBtn.addEventListener('click', () => {
             if (!loggedInUser) {
@@ -247,7 +247,7 @@ function loadDesc(desc) {
 function loadSkills(skills) {
     console.log('Loading skills:', skills);
     const skillList = document.querySelector('.skills-list');
-    skillList.innerHTML = ''; // Clear previous skills
+    skillList.innerHTML = '';
     if (Array.isArray(skills) && skills.length > 0) {
         skills.forEach(skill => {
             const skillElm = document.createElement("li");
@@ -263,7 +263,7 @@ function loadSkills(skills) {
 
 function loadProject(projName, projDesc) {
     const projContainer = document.querySelector(".proj-container");
-    projContainer.innerHTML = ''; // Clear previous project
+    projContainer.innerHTML = '';
     if (projName && projDesc) {
         const projNameElm = document.createElement("h2");
         projNameElm.innerText = projName;
